@@ -15,15 +15,19 @@ class Relatorio(QDialog):
 		self.nome = None
 		self.pesoIdeal = []
 		self.descricoes = {
-			"magreza": ["De acordo com a Organização Mundial da Saúde, seu IMC está abaixo do recomendado para a sua altura. Para atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"< {x * 18.5:.1f} kg"],
-			"normal": ["De acordo com a Organização Mundial da Saúde, seu IMC é considerado normal para a sua altura. Para manter o valor de IMC normal, seu peso pode variar entre ", lambda x: f"{x*18.5:.1f} e {x * 24.9:.1f} kg"],
-			"sobrepeso": ["De acordo com a Organização Mundial da Saúde, seu IMC está acima do recomendado para a sua altura. Para atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"{x * 24.9:.1f} e {x * 30:.1f} kg"],
-			"obesidade": ["De acordo com a Organização Mundial da Saúde, seu IMC está acima do recomendado para a sua altura. Para atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"> {x * 30:.1f} kg"]
+			"magreza": ["De acordo com a Organização Mundial da Saúde, seu IMC está abaixo do recomendado para a sua altura.\nPara atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"< {x * 18.5:.1f} kg"],
+			"normal": ["De acordo com a Organização Mundial da Saúde, seu IMC é considerado normal para a sua altura.\nPara manter o valor de IMC normal, seu peso pode variar entre ", lambda x: f"{x*18.5:.1f} a {x * 24.9:.1f} kg"],
+			"sobrepeso": ["De acordo com a Organização Mundial da Saúde, seu IMC está acima do recomendado para a sua altura.\nPara atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"{x * 24.9:.1f} a {x * 29.9:.1f} kg"],
+			"obesidade1": ["De acordo com a Organização Mundial da Saúde, seu IMC está acima do recomendado para a sua altura.\nPara atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"{x * 30:.1f} a {x * 34.9:.1f} kg"],
+			"obesidade2": ["De acordo com a Organização Mundial da Saúde, seu IMC está acima do recomendado para a sua altura.\nPara atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"{x * 35:.1f} a {x * 39.9:.1f} kg"],
+			"obesidade3": ["De acordo com a Organização Mundial da Saúde, seu IMC está acima do recomendado para a sua altura.\nPara atingir um valor de IMC normal, seu peso deve estar entre ", lambda x: f"> {x * 40:.1f} kg"]
 		}
 
 	def gerarRelatorio(self):
 
-		janelas.widget(2).inicioRelatorio.setText(f"Olá, {self.nome}.\n\nSeu resultado foi {self.imc:.1f} kg/m²")
+		textoSaudacao = f"Olá, {self.nome}.\n\nSeu resultado foi {self.imc:.1f} kg/m²"
+
+		janelas.widget(2).inicioRelatorio.setText(textoSaudacao)
 
 		magreza_label = janelas.widget(2).textoP_IDEAL_magreza
 		magreza_descricao = self.descricoes['magreza']
@@ -37,24 +41,50 @@ class Relatorio(QDialog):
 		sobrepeso_descricao = self.descricoes['sobrepeso']
 		sobrepeso_label.setText(sobrepeso_descricao[1](self.altura))
 
-		obesidade_label = janelas.widget(2).textoP_IDEAL_obesidade
-		obesidade_descricao = self.descricoes['obesidade']
-		obesidade_label.setText(obesidade_descricao[1](self.altura))
+		obesidade1_label = janelas.widget(2).textoP_IDEAL_obesidade1
+		obesidade1_descricao = self.descricoes['obesidade1']
+		obesidade1_label.setText(obesidade1_descricao[1](self.altura))
+
+		obesidade2_label = janelas.widget(2).textoP_IDEAL_obesidade2
+		obesidade2_descricao = self.descricoes['obesidade2']
+		obesidade2_label.setText(obesidade2_descricao[1](self.altura))
+
+		obesidade3_label = janelas.widget(2).textoP_IDEAL_obesidade3
+		obesidade3_descricao = self.descricoes['obesidade3']
+		obesidade3_label.setText(obesidade3_descricao[1](self.altura))
 
 		janelas.widget(2).inicioDescricao.setText(self.descricoes[self.classificacao][0] + normal_descricao[1](self.altura))
 
+		textoDescricao = '\n\n' + janelas.widget(2).inicioDescricao.text() + '\n\n'
+		textoDescResultado = f"{'CLASSIFICAÇÃO':^20}|{'IMC':^20}|{'PESO IDEAL':^20}\n"
+
 		if self.classificacao == 'magreza':
+			textoResultado = f"{janelas.widget(2).textoMagreza.text():^20}|{janelas.widget(2).textoIMC_magreza.text():^20}|{janelas.widget(2).textoP_IDEAL_magreza.text():^20}"
 			for i in (janelas.widget(2).textoMagreza, janelas.widget(2).textoIMC_magreza, janelas.widget(2).textoP_IDEAL_magreza):
 				i.setStyleSheet('border-bottom: 1px solid rgb(200, 200, 255);background-color: rgba(255, 215, 196,0.85);color: rgba(33,33,33,1);')
 		elif self.classificacao == 'normal':
+			textoResultado = f"{janelas.widget(2).textoNormal.text():^20}|{janelas.widget(2).textoIMC_normal.text():^20}|{janelas.widget(2).textoP_IDEAL_normal.text():^20}"
 			for i in (janelas.widget(2).textoNormal, janelas.widget(2).textoIMC_normal, janelas.widget(2).textoP_IDEAL_normal):
 				i.setStyleSheet('border-bottom: 1px solid rgb(200, 200, 255);background-color: rgba(175, 255, 200, 0.8);color: rgba(33,33,33,1);')
 		elif self.classificacao == 'sobrepeso':
+			textoResultado = f"{janelas.widget(2).textoSobrepeso.text():^20}|{janelas.widget(2).textoIMC_sobrepeso.text():^20}|{janelas.widget(2).textoP_IDEAL_sobrepeso.text():^20}"
 			for i in (janelas.widget(2).textoSobrepeso, janelas.widget(2).textoIMC_sobrepeso, janelas.widget(2).textoP_IDEAL_sobrepeso):
 				i.setStyleSheet('border-bottom: 1px solid rgb(200, 200, 255);background-color: rgba(255, 215, 196,0.85);color: rgba(33,33,33,1);')
-		else:
-			for i in (janelas.widget(2).textoObesidade, janelas.widget(2).textoIMC_obesidade, janelas.widget(2).textoP_IDEAL_obesidade):
+		elif self.classificacao == 'obesidade1':
+			textoResultado = f"{janelas.widget(2).textoObesidade1.text():^20}|{janelas.widget(2).textoIMC_obesidade1.text():^20}|{janelas.widget(2).textoP_IDEAL_obesidade1.text():^20}"
+			for i in (janelas.widget(2).textoObesidade1, janelas.widget(2).textoIMC_obesidade1, janelas.widget(2).textoP_IDEAL_obesidade1):
 				i.setStyleSheet('border-bottom: 1px solid rgb(200, 200, 255);background-color: rgba(255, 215, 196,0.85);color: rgba(33,33,33,1);')
+		elif self.classificacao == 'obesidade2':
+			textoResultado = f"{janelas.widget(2).textoObesidade2.text():^20}|{janelas.widget(2).textoIMC_obesidade2.text():^20}|{janelas.widget(2).textoP_IDEAL_obesidade2.text():^20}"
+			for i in (janelas.widget(2).textoObesidade2, janelas.widget(2).textoIMC_obesidade2, janelas.widget(2).textoP_IDEAL_obesidade2):
+				i.setStyleSheet('border-bottom: 1px solid rgb(200, 200, 255);background-color: rgba(255, 215, 196,0.85);color: rgba(33,33,33,1);')
+		else:
+			textoResultado = f"{janelas.widget(2).textoObesidade3.text():^20}|{janelas.widget(2).textoIMC_obesidade3.text():^20}|{janelas.widget(2).textoP_IDEAL_obesidade3.text():^20}"
+			for i in (janelas.widget(2).textoObesidade3, janelas.widget(2).textoIMC_obesidade3, janelas.widget(2).textoP_IDEAL_obesidade3):
+				i.setStyleSheet('border-bottom: 1px solid rgb(200, 200, 255);background-color: rgba(255, 215, 196,0.85);color: rgba(33,33,33,1);')
+
+		with open(f"Relatório - {self.nome}.txt", 'w') as relatorio:
+			relatorio.write(textoSaudacao + textoDescricao + textoDescResultado + textoResultado)
 
 class TelaCarregamento(QDialog):
 	def __init__(self):
@@ -130,8 +160,14 @@ class PaginaInicial(QtWidgets.QMainWindow, Relatorio, TelaCarregamento):
 				self.classificacao = 'normal'
 			elif self.imc > 24.9 and self.imc <= 29.9:
 				self.classificacao = 'sobrepeso'
+			elif self.imc > 30 and self.imc <= 34.9:
+				self.classificacao = 'obesidade1'
+			elif self.imc > 35 and self.imc <= 39.9:
+				self.classificacao = 'obesidade2'
 			else:
-				self.classificacao = 'obesidade'
+				self.classificacao = 'obesidade3'
+
+
 
 
 			self.gerarRelatorio()
